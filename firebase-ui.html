@@ -22,13 +22,11 @@ An element providing a solution to no problem in particular.
 
 Example:
 
-    <firebase-ui></firebase-ui>
+    <firebase-ui api-key="1234567890_abcdefghijklmnopqrstuvwxyz" database-url="https://some-firebase.firebaseio.com/" app-name="TestApp"></firebase-ui>
 
 Example:
 
-    <firebase-ui>
-      <h2>Hello firebase-ui</h2>
-    </firebase-ui>
+    <firebase-ui api-key="1234567890_abcdefghijklmnopqrstuvwxyz" database-url="https://some-firebase.firebaseio.com/" app-name="TestApp" google-client-id="1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com" facebook-app-id="123457890" enable-google enable-facebook></firebase-ui>
 
 @demo demo/index.html
 @hero hero.svg
@@ -493,25 +491,6 @@ Example:
       return this.auth.signOut();
     },
 
-    /**
-     * The `firebase-ui-lasers` event is fired whenever `fireLasers` is called.
-     *
-     * @event firebase-ui-lasers
-     * @detail {{sound: String}}
-     */
-
-    /**
-     * Attempt to destroy this element's enemies with a beam of light!
-     *
-     * Or, at least, dispatch an event in the vain hope that someone else will
-     * do the zapping.
-     */
-    fireLasers: function() {
-      this.fire('firebase-ui-lasers', {
-        sound: 'Pew pew!'
-      });
-    },
-
     _setEmailValid: function() {
       this.set('emailValid', !!this.email);
     },
@@ -523,6 +502,41 @@ Example:
     _setResetValid: function() {
       this.set('resetValid', this.email && this.password && this.password.length >= 6 && this.newPassword && this.newPassword.length >= 6);
     }
+
+    /**
+     * The `login` event is fired after successful login.
+     *
+     * @event login
+     * @detail {{sound: Object}}
+     */
+
+    /**
+     * The `error` event is fired after any login error.
+     *
+     * @event error
+     * @detail {{sound: Object}}
+     */
+
+    /**
+     * The `register` event is fired after successful email/password registration.
+     *
+     * @event register
+     * @detail {{sound: Object}}
+     */
+
+    /**
+     * The `password-reset` event is fired after a password-reset email has been sent.
+     *
+     * @event password-reset
+     * @detail {{sound: undefined}}
+     */
+
+    /**
+     * The `password-changed` event is fired after a user's password has been successfully changed.
+     *
+     * @event password-changed
+     * @detail {{sound: undefined}}
+     */
 
   });
   </script>

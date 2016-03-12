@@ -20,9 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved>
-  <firebase-ui google-client-id="3266100346-gtoget85nvh38lj4k1haqbkq5smn1pto.apps.googleusercontent.com" api-key="AIzaSyBVFg71DOC_J041ImdPfYrya-q_uBU08zo" database-url="https://pushpop-1147.firebaseio.com/" app-name="PushPop" facebook-app-id="722019977935277" enable-google enable-facebook>
-    <h2>Hello firebase-ui</h2>
-  </firebase-ui>
+  <firebase-ui api-key="AIzaSyBVFg71DOC_J041ImdPfYrya-q_uBU08zo" database-url="https://pushpop-1147.firebaseio.com/" app-name="PushPop" google-client-id="3266100346-gtoget85nvh38lj4k1haqbkq5smn1pto.apps.googleusercontent.com" facebook-app-id="722019977935277" enable-google enable-facebook></firebase-ui>
   <button onclick="login()">Log In</button>
   <button onclick="register()">Register</button>
   <button onclick="reset()">Reset</button>
@@ -51,31 +49,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function signOut() {
     firebaseUI.signOut()
-      .then(function (res) {
+      .then(function(res) {
         console.log('signOut success', res);
       })
-      .catch(function (err) {
+      .catch(function(err) {
         console.log('signOut err', err);
       });
   }
 
-  firebaseUI.addEventListener('error', function (e) {
+  firebaseUI.addEventListener('error', function(e) {
     console.info('firebase-ui error', e.detail.toString());
   });
 
-  firebaseUI.addEventListener('login', function (e) {
+  firebaseUI.addEventListener('login', function(e) {
     console.info('firebase-ui login', e.detail);
   });
 
-  firebaseUI.addEventListener('logout', function (e) {
+  firebaseUI.addEventListener('logout', function(e) {
     console.info('firebase-ui logout');
   });
 
-  firebaseUI.addEventListener('password-reset', function () {
+  firebaseUI.addEventListener('password-reset', function() {
     console.info('firebase-ui password-reset');
   });
 
-  firebaseUI.addEventListener('password-changed', function () {
+  firebaseUI.addEventListener('password-changed', function() {
     console.info('firebase-ui password-changed');
   });
 
