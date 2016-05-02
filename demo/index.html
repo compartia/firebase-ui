@@ -20,16 +20,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved>
-  <firebase-ui api-key="AIzaSyBVFg71DOC_J041ImdPfYrya-q_uBU08zo" database-url="https://pushpop-1147.firebaseio.com/" app-name="PushPop" google-client-id="3266100346-gtoget85nvh38lj4k1haqbkq5smn1pto.apps.googleusercontent.com" facebook-app-id="722019977935277" enable-google enable-facebook></firebase-ui>
+  <firebase-ui api-key="AIzaSyBVFg71DOC_J041ImdPfYrya-q_uBU08zo" database-url="https://pushpop-1147.firebaseio.com/" app-name="PushPop"
+  google-client-id="3266100346-eo53nodkbl5tnha6hstrpivm3s3mbn0f.apps.googleusercontent.com" facebook-app-id="722019977935277"
+  enable-google google-signin-scope="profile" enable-facebook facebook-signin-profile="public_profile"></firebase-ui>
   <button onclick="login()">Log In</button>
   <button onclick="register()">Register</button>
   <button onclick="reset()">Reset</button>
   <button onclick="changePassword()">Change Password</button>
   <button onclick="signOut()">Sign Out</button>
   <script type="text/javascript">
-  var app = document.querySelector('#firebaseApp');
+    var app = document.querySelector('#firebaseApp');
   var firebaseUI = document.querySelector('firebase-ui');
-  console.log('firebaseUI', firebaseUI);
 
   function login() {
     firebaseUI.openLogin();
