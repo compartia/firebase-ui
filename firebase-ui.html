@@ -123,9 +123,9 @@ Example:
         max-width: 12rem;
       }
     </style>
-    <meta name="google-signin-scope" content="[[googleSigninScope]]">
-    <meta name="google-signin-client_id" content="[[googleClientId]]">
-    <meta name="google-signin-cookiepolicy" content="single_host_origin">
+    <!--<meta name="google-signin-scope" content="[[googleSigninScope]]">
+    <meta name="google-signin-client_id" content="[[googleClientId]]">-->
+    <!--<meta name="google-signin-cookiepolicy" content="single_host_origin">-->
     <paper-dialog id="loginDialog" modal>
       <paper-material elevation="0">
         <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
@@ -287,6 +287,11 @@ Example:
         type: String,
         value: 'public_profile,email'
       },
+      
+      user: {
+        type: Object,
+        notify: true
+      },
 
       app: Object,
       auth: Object,
@@ -319,7 +324,10 @@ Example:
     observers: [
       '_setEmailValid(email)',
       '_setCredentialsValid(email, password)',
-      '_setResetValid(email, password, newPassword)'
+      '_setResetValid(email, password, newPassword)',
+      '_initializeFirebase(apiKey)',
+      '_initializeFacebook(facebookAppId)',
+      '_initializeGoogle(googleClientId)',
     ],
 
     // Element Lifecycle
@@ -334,6 +342,10 @@ Example:
     },
 
     attached: function() {
+      
+    },
+    
+    _initializeFirebase: function() {
       var firebaseUI = this;
 
       if (this.apiKey) {
@@ -352,10 +364,13 @@ Example:
           }
         });
       } else {
-        console.log('api-key required for firebase-ui');
+        // console.log('api-key required for firebase-ui');
       }
-
-
+    },
+    
+    _initializeFacebook: function() {
+      var firebaseUI = this;
+      
       if (this.facebookAppId) {
         window.fbAsyncInit = function() {
           FB.init({
@@ -376,11 +391,26 @@ Example:
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
       } else if (this.enableFacebook) {
-        console.log('facebook-app-id required');
+        // console.log('facebook-app-id required');
       }
-
-      if (!this.googleClientId && this.enableGoogle) {
-        console.log('google-client-id required'); 
+    },
+    
+    _initializeGoogle: function() {
+      var firebaseUI = this;
+      if (this.googleClientId && this.enableGoogle) {
+        gapi.load('auth2', function() {
+          gapi.auth2.init({
+            client_id: firebaseUI.googleClientId,
+            scope: firebaseUI.googleSigninScope,
+            cookie_policy: 'single_host_origin'
+          }).then(function() {
+            console.log('success', arguments);
+          }, function() {
+            console.log('err', arguments);
+          });
+        });
+      } else if (this.enableGoogle) {
+        // console.log('google-client-id required');
       }
     },
 
