@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <script src="https://apis.google.com/js/platform.js" async defer></script>
-<script src='../web-firebase/firebasejs/3.0.0-eap.2/firebase.js'></script>
+<script src="https://www.gstatic.com/firebasejs/3.0.0-eap.5/firebase.js"></script>
 <!--
 An element providing a solution to no problem in particular.
 
@@ -223,6 +223,14 @@ Example:
       databaseUrl: {
         type: String
       },
+      
+      /**
+       * `auth-domain` is required and can be found under your Firebase project
+       * at https://console.firebase.google.com/project/
+       */
+      authDomain: {
+        type: String
+      },
 
       /**
        * `app-name` is used to initialize your Firebase app.
@@ -231,6 +239,11 @@ Example:
         type: String,
         value: 'Firebase App'
       },
+      
+      /**
+       * `storage-bucket` is used to initialize your Firebase app.
+       */
+      storageBucket: String,
 
       /**
        * `google-client-id` is required and can be found under your OAuth 2.0 client IDs 
@@ -348,17 +361,24 @@ Example:
     _initializeFirebase: function() {
       var firebaseUI = this;
 
-      if (this.apiKey) {
-        this.app = firebase.App.initialize({
-          apiKey: this.apiKey,
-          databaseUrl: this.databaseUrl
-        }, this.appName);
+      if (this.apiKey && this.databaseUrl && this.authDomain && this.appName) {
+        if (!firebase.apps || Object.keys(firebase.apps).length === 0) {
+          this.app = firebase.initializeApp({
+            apiKey: this.apiKey,
+            databaseURL: this.databaseUrl,
+            authDomain: this.authDomain 
+          }, this.appName);  
+        } else {
+          this.app = firebase.app(this.appName);
+        }
+        
         this.auth = this.app.auth();
 
-        this.auth.addAuthStateListener(function(auth) {
-          firebaseUI.set('user', auth.currentUser);
-          if (auth.currentUser) {
-            firebaseUI.fire('login', auth.currentUser);
+        this.auth.onAuthStateChanged(function() {
+          var currentUser = firebaseUI.auth.currentUser;
+          firebaseUI.set('user', currentUser);
+          if (currentUser) {
+            firebaseUI.fire('login', currentUser);
           } else {
             firebaseUI.fire('logout');
           }
@@ -474,7 +494,7 @@ Example:
       return gapi.auth2.getAuthInstance().signIn(config)
         .then(function(googleUser) {
           user = googleUser;
-          credential = firebase.GoogleAuthProvider.credential({
+          credential = firebase.auth.GoogleAuthProvider.credential({
             'idToken': googleUser.getAuthResponse().id_token
           });
           return firebaseUI.auth.signInWithCredential(credential)
@@ -513,7 +533,7 @@ Example:
       };
       var setCredential = function(response) {
         if (response.status === 'connected') {
-          var credential = firebase.FacebookAuthProvider.credential({
+          var credential = firebase.auth.FacebookAuthProvider.credential({
             "accessToken": response.authResponse.accessToken
           });
           return firebaseUI.auth.signInWithCredential(credential)
