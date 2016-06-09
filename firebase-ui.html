@@ -26,7 +26,7 @@ Example:
 
 Example:
 
-    <firebase-ui api-key="1234567890_abcdefghijklmnopqrstuvwxyz" database-url="https://some-firebase.firebaseio.com/" app-name="TestApp" google-client-id="1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com" facebook-app-id="123457890" enable-google enable-facebook></firebase-ui>
+    <firebase-ui api-key="1234567890_abcdefghijklmnopqrstuvwxyz" database-url="https://some-firebase.firebaseio.com/" app-name="TestApp" facebook-app-id="123457890" enable-google enable-facebook></firebase-ui>
 
 @demo demo/index.html
 @hero hero.svg
@@ -212,25 +212,19 @@ Example:
        * `api-key` is required and can be found under your API keys
        * at https://console.cloud.google.com/apis/credentials
        */
-      apiKey: {
-        type: String
-      },
+      apiKey: String,
 
       /**
        * `database-url` is required and can be found under your Firebase project
        * at https://console.firebase.google.com/project/
        */
-      databaseUrl: {
-        type: String
-      },
+      databaseUrl: String,
       
       /**
        * `auth-domain` is required and can be found under your Firebase project
        * at https://console.firebase.google.com/project/
        */
-      authDomain: {
-        type: String
-      },
+      authDomain: String,
 
       /**
        * `app-name` is used to initialize your Firebase app.
@@ -244,14 +238,6 @@ Example:
        * `storage-bucket` is used to initialize your Firebase app.
        */
       storageBucket: String,
-
-      /**
-       * `google-client-id` is required and can be found under your OAuth 2.0 client IDs 
-       * at https://console.cloud.google.com/apis/credentials
-       */
-      googleClientId: {
-        type: String
-      },
 
       /**
        * `facebook-app-id` is required for facebook auth.
@@ -338,9 +324,8 @@ Example:
       '_setEmailValid(email)',
       '_setCredentialsValid(email, password)',
       '_setResetValid(email, password, newPassword)',
-      '_initializeFirebase(apiKey)',
-      '_initializeFacebook(facebookAppId)',
-      '_initializeGoogle(googleClientId)',
+      '_initializeFirebase(apiKey, databaseUrl, authDomain, appName)',
+      '_initializeFacebook(facebookAppId)'
     ],
 
     // Element Lifecycle
@@ -414,25 +399,6 @@ Example:
         // console.log('facebook-app-id required');
       }
     },
-    
-    _initializeGoogle: function() {
-      var firebaseUI = this;
-      if (this.googleClientId && this.enableGoogle) {
-        gapi.load('auth2', function() {
-          gapi.auth2.init({
-            client_id: firebaseUI.googleClientId,
-            scope: firebaseUI.googleSigninScope,
-            cookie_policy: 'single_host_origin'
-          }).then(function() {
-            console.log('success', arguments);
-          }, function() {
-            console.log('err', arguments);
-          });
-        });
-      } else if (this.enableGoogle) {
-        // console.log('google-client-id required');
-      }
-    },
 
     detached: function() {
       // The analog to `attached`, `detached` fires when the element has been
@@ -480,49 +446,78 @@ Example:
 
     loginWithGoogle: function() {
       var firebaseUI = this;
-      var config = {
-        scope: this.googleSigninScope
-      };
-      var user;
-      var credential;
-      
-      if (!config.scope || !~config.scope.split(' ').indexOf('email')) {
-        config.scope += ' email';
-        config.scope = config.scope.replace(/^\s/, '')
+      var provider = new firebase.auth.GoogleAuthProvider();
+      var scopes = this.googleSigninScope.split(' ');
+
+      if (!~scopes.indexOf('email')) {
+        scopes.push('email');
       }
       
-      return gapi.auth2.getAuthInstance().signIn(config)
-        .then(function(googleUser) {
-          user = googleUser;
-          credential = firebase.auth.GoogleAuthProvider.credential({
-            'idToken': googleUser.getAuthResponse().id_token
-          });
-          return firebaseUI.auth.signInWithCredential(credential)
-            .then(function(user) {
-              firebaseUI.$.loginDialog.close();
-              return Promise.resolve(user);
-            });
-        }, function(err) {
-          if (err && err.name === 'auth/email-exists') {
-            var basicProfile = user.getBasicProfile();
-            var profile = {
-              id: basicProfile.getId(),
-              name: basicProfile.getName(),
-              givenName: basicProfile.getGivenName(),
-              familyName: basicProfile.getFamilyName(),
-              imageUrl: basicProfile.getImageUrl(),
-              email: basicProfile.getEmail()
-            };
-            firebaseUI.confirmCredential(profile.email, {
-              provider: 'google.com',
-              credential: credential,
-              user: profile,
-              error: err
-            });
-          } else {
-            firebaseUI.fire('error', err);
-          }
+      scopes.forEach(function(scope) {
+        provider.addScope(scope);
+      });
+
+      return this.auth.signInWithPopup(provider)
+        .then(function(result) {
+          firebaseUI.$.loginDialog.close();
+          return Promise.resolve(result);
+        })
+        .catch(function(err) {
+          console.log('error');
+          return Promise.reject(err);
+          // if (err && err.name === 'auth/email-exists') {
+          //   var basicProfile = user.getBasicProfile();
+          //   var profile = {
+          //     id: basicProfile.getId(),
+          //     name: basicProfile.getName(),
+          //     givenName: basicProfile.getGivenName(),
+          //     familyName: basicProfile.getFamilyName(),
+          //     imageUrl: basicProfile.getImageUrl(),
+          //     email: basicProfile.getEmail()
+          //   };
+          //   firebaseUI.confirmCredential(profile.email, {
+          //     provider: 'google.com',
+          //     credential: credential,
+          //     user: profile,
+          //     error: err
+          //   });
+          // } else {
+          //   firebaseUI.fire('error', err);
+          // }
         });
+      
+      // return gapi.auth2.getAuthInstance().signIn(config)
+      //   .then(function(googleUser) {
+      //     user = googleUser;
+      //     credential = firebase.auth.GoogleAuthProvider.credential({
+      //       'idToken': googleUser.getAuthResponse().id_token
+      //     });
+      //     return firebaseUI.auth.signInWithCredential(credential)
+      //       .then(function(user) {
+      //         firebaseUI.$.loginDialog.close();
+      //         return Promise.resolve(user);
+      //       });
+      //   }, function(err) {
+      //     if (err && err.name === 'auth/email-exists') {
+      //       var basicProfile = user.getBasicProfile();
+      //       var profile = {
+      //         id: basicProfile.getId(),
+      //         name: basicProfile.getName(),
+      //         givenName: basicProfile.getGivenName(),
+      //         familyName: basicProfile.getFamilyName(),
+      //         imageUrl: basicProfile.getImageUrl(),
+      //         email: basicProfile.getEmail()
+      //       };
+      //       firebaseUI.confirmCredential(profile.email, {
+      //         provider: 'google.com',
+      //         credential: credential,
+      //         user: profile,
+      //         error: err
+      //       });
+      //     } else {
+      //       firebaseUI.fire('error', err);
+      //     }
+      //   });
     },
 
     loginWithFacebook: function() {
@@ -542,7 +537,7 @@ Example:
               return Promise.resolve(user);
             })
             .catch(function(err) {
-              if (err && err.name === 'auth/need-confirmation') {
+              if (err && err.code === 'auth/account-exists-with-different-credential') {
                 return new Promise(function(resolve, reject) {
                   FB.api('/' + response.authResponse.userID, {fields: 'email,name'}, function(user) {
                     return firebaseUI.confirmCredential(user.email, {
@@ -600,10 +595,10 @@ Example:
             });
         })
         .catch(function(err) {
-          if (err && err.name === 'auth/email-exists') {
+          if (err && err.code === 'auth/email-already-in-use') {
             firebaseUI.confirmCredential(firebaseUI.email, {
               provider: 'password',
-              credential: firebase.EmailPasswordAuthProvider.credential(firebaseUI.email, firebaseUI.password),
+              credential: firebase.auth.EmailAuthProvider.credential(firebaseUI.email, firebaseUI.password),
               user: {
                 email: firebaseUI.email
               },
@@ -684,6 +679,9 @@ Example:
             firebaseUI.$.loginDialog.close();
             firebaseUI.$.registerDialog.close();
             firebaseUI.$.confirmationDialog.open();
+            firebaseUI.async(function() {
+              firebaseUI.$.confirmationDialog.fire('iron-resize')
+            }, 100);
             return Promise.resolve;  
           }
         })
@@ -694,14 +692,11 @@ Example:
     
     getCredentialForEmailAndPassword: function() {
       var firebaseUI = this;
-      var credential;
-      return this.auth.signInWithEmailAndPassword(this.email, this.password)
-        .then(function(user) {
-          credential = firebase.EmailPasswordAuthProvider.credential(firebaseUI.email, firebaseUI.password);
-          return firebaseUI.auth.signInWithCredential(credential)
-            .then(function() {
-              return firebaseUI.auth.currentUser.link(firebaseUI.credentialsToConfirm.credential);    
-            });
+      var credential = firebase.auth.EmailAuthProvider.credential(firebaseUI.email, firebaseUI.password);;
+      
+      return firebaseUI.auth.signInWithCredential(credential)
+        .then(function() {
+          return firebaseUI.auth.currentUser.link(firebaseUI.credentialsToConfirm.credential);    
         })
         .then(function(user) {
           firebaseUI._confirmationSuccess(user);
@@ -713,20 +708,15 @@ Example:
     getCredentialForGoogle: function() {
       var firebaseUI = this;
       var credential;
-      return gapi.auth2.getAuthInstance().signIn()
-        .then(function(googleUser) {
-          credential = firebase.GoogleAuthProvider.credential({
-            'idToken': googleUser.getAuthResponse().id_token
-          });
-          
-          return firebaseUI.auth.signInWithCredential(credential)
-            .then(function() {
-              return firebaseUI.auth.currentUser.link(firebaseUI.credentialsToConfirm.credential);    
-            });
+      return this.loginWithGoogle()
+        .then(function(result) {
+          var credential = result.credential;
+          return firebaseUI.auth.currentUser.link(firebaseUI.credentialsToConfirm.credential);
         })
         .then(function(user) {
           firebaseUI._confirmationSuccess(user);
-        }, function(err) {
+        })
+        .catch(function(err) {
           firebaseUI._confirmationError(err, 'google.com', credential);
         });
     },
@@ -741,7 +731,7 @@ Example:
       
       var linkCredential = function(response) {
         if (response.status === 'connected') {
-          credential = firebase.FacebookAuthProvider.credential({
+          credential = firebase.auth.FacebookAuthProvider.credential({
             "accessToken": response.authResponse.accessToken
           });
           return firebaseUI.auth.signInWithCredential(credential)
