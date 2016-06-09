@@ -134,12 +134,17 @@ Example:
           <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
           <paper-input label="password" type="password" value="{{password::input}}"></paper-input>
           <paper-button class="firebase-button" raised on-click="signInWithEmailAndPassword" disabled$="[[!credentialsValid]]">Login</paper-button>
-          <div class="divider">
-            <span>or</span>
-          </div>
-          <div class="g-signin2" data-theme="light" style="visibility: hidden; position: absolute;"></div>
-          <paper-button id="google" raised on-click="loginWithGoogle">Google</paper-button>
-          <paper-button id="facebook" raised on-click="loginWithFacebook">Facebook</paper-button>
+          <template is="dom-if" if="{{showOAuth}}">
+            <div class="divider">
+              <span>or</span>
+            </div>
+            <template is="dom-if" if="{{enableGoogle}}">
+              <paper-button id="google" raised on-click="loginWithGoogle">Google</paper-button>
+            </template>
+            <template is="dom-if" if="{{enableFacebook}}">
+              <paper-button id="facebook" raised on-click="loginWithFacebook">Facebook</paper-button>
+            </template>
+          </template>
         </paper-dialog-scrollable>
       </paper-material>
     </paper-dialog>
@@ -318,6 +323,11 @@ Example:
       confirmGoogle: Boolean,
       confirmFacebook: Boolean,
       credentialsToConfirm: Object,
+
+      showOAuth: {
+        type: Boolean,
+        value: false
+      }
     },
 
     observers: [
@@ -335,7 +345,9 @@ Example:
     },
 
     attached: function() {
-      
+      if (this.enableFacebook || this.enableGoogle) {
+        this.set('showOAuth', true);
+      }
     },
     
     _initializeFirebase: function() {
