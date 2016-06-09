@@ -15,7 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-material/paper-material.html">
-<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer></script>
 <script src="https://www.gstatic.com/firebasejs/3.0.0-eap.5/firebase.js"></script>
 <!--
 An element providing a solution to no problem in particular.
@@ -157,51 +157,51 @@ Example:
           <template is="dom-if" if="{{confirmEmailPassword}}">
             <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
             <paper-input label="password" type="password" value="{{password::input}}"></paper-input>
-            <paper-button class="firebase-button" raised on-click="getCredentialForEmailAndPassword" disabled$="[[!credentialsValid]]">Login</paper-button>  
+            <paper-button class="firebase-button" raised on-click="getCredentialForEmailAndPassword" disabled$="[[!credentialsValid]]">Login</paper-button>
           </template>
-  <template is="dom-if" if="{{confirmGoogle}}">
+          <template is="dom-if" if="{{confirmGoogle}}">
             <div class="g-signin2" data-theme="light" style="visibility: hidden; position: absolute;"></div>
-            <paper-button id="google" raised on-click="getCredentialForGoogle">Google</paper-button>  
+            <paper-button id="google" raised on-click="getCredentialForGoogle">Google</paper-button>
           </template>
-  <template is="dom-if" if="{{confirmFacebook}}">
-            <paper-button id="facebook" raised on-click="getCredentialForFacebook">Facebook</paper-button>  
+          <template is="dom-if" if="{{confirmFacebook}}">
+            <paper-button id="facebook" raised on-click="getCredentialForFacebook">Facebook</paper-button>
           </template>
-  </paper-dialog-scrollable>
-  </paper-material>
-  </paper-dialog>
-  <paper-dialog id="registerDialog" modal>
-    <paper-material elevation="0">
-      <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
-      <h2>Register</h2>
-      <paper-dialog-scrollable class="layout vertical">
-        <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
-        <paper-input label="password" type="password" value="{{password::input}}"></paper-input>
-        <paper-button class="firebase-button" raised on-click="createUserWithEmailAndPassword" disabled$="[[!credentialsValid]]">Register</paper-button>
-      </paper-dialog-scrollable>
-    </paper-material>
-  </paper-dialog>
-  <paper-dialog id="resetDialog" modal>
-    <paper-material elevation="0">
-      <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
-      <h2>Send Password Reset Email</h2>
-      <paper-dialog-scrollable class="layout vertical">
-        <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
-        <paper-button class="firebase-button" raised on-click="sendPasswordResetEmail" disabled$="[[!emailValid]]">Send</paper-button>
-      </paper-dialog-scrollable>
-    </paper-material>
-  </paper-dialog>
-  <paper-dialog id="changePasswordDialog" modal>
-    <paper-material elevation="0">
-      <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
-      <h2>Change Password</h2>
-      <paper-dialog-scrollable class="layout vertical">
-        <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
-        <paper-input label="current password" type="password" value="{{password::input}}"></paper-input>
-        <paper-input label="new password" type="password" value="{{newPassword::input}}"></paper-input>
-        <paper-button class="firebase-button" raised on-click="confirmPasswordReset" disabled$="[[!resetValid]]">Reset Password</paper-button>
-      </paper-dialog-scrollable>
-    </paper-material>
-  </paper-dialog>
+        </paper-dialog-scrollable>
+      </paper-material>
+    </paper-dialog>
+    <paper-dialog id="registerDialog" modal>
+      <paper-material elevation="0">
+        <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
+        <h2>Register</h2>
+        <paper-dialog-scrollable class="layout vertical">
+          <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
+          <paper-input label="password" type="password" value="{{password::input}}"></paper-input>
+          <paper-button class="firebase-button" raised on-click="createUserWithEmailAndPassword" disabled$="[[!credentialsValid]]">Register</paper-button>
+        </paper-dialog-scrollable>
+      </paper-material>
+    </paper-dialog>
+    <paper-dialog id="resetDialog" modal>
+      <paper-material elevation="0">
+        <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
+        <h2>Send Password Reset Email</h2>
+        <paper-dialog-scrollable class="layout vertical">
+          <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
+          <paper-button class="firebase-button" raised on-click="sendPasswordResetEmail" disabled$="[[!emailValid]]">Send</paper-button>
+        </paper-dialog-scrollable>
+      </paper-material>
+    </paper-dialog>
+    <paper-dialog id="changePasswordDialog" modal>
+      <paper-material elevation="0">
+        <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
+        <h2>Change Password</h2>
+        <paper-dialog-scrollable class="layout vertical">
+          <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
+          <paper-input label="current password" type="password" value="{{password::input}}"></paper-input>
+          <paper-input label="new password" type="password" value="{{newPassword::input}}"></paper-input>
+          <paper-button class="firebase-button" raised on-click="confirmPasswordReset" disabled$="[[!resetValid]]">Reset Password</paper-button>
+        </paper-dialog-scrollable>
+      </paper-material>
+    </paper-dialog>
   </template>
   <script>
     Polymer({
