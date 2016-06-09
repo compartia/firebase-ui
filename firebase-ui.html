@@ -22,11 +22,11 @@ An element providing a solution to no problem in particular.
 
 Example:
 
-    <firebase-ui api-key="1234567890_abcdefghijklmnopqrstuvwxyz" database-url="https://some-firebase.firebaseio.com/" app-name="TestApp"></firebase-ui>
+    <firebase-ui api-key="1234567890_abcdefghijklmnopqrstuvwxyz" database-url="https://some-firebase.firebaseio.com/" auth-domain="some-firebase.firebaseapp.com" app-name="TestApp"></firebase-ui>
 
 Example:
 
-    <firebase-ui api-key="1234567890_abcdefghijklmnopqrstuvwxyz" database-url="https://some-firebase.firebaseio.com/" app-name="TestApp" facebook-app-id="123457890" enable-google enable-facebook></firebase-ui>
+    <firebase-ui api-key="1234567890_abcdefghijklmnopqrstuvwxyz" database-url="https://some-firebase.firebaseio.com/" auth-domain="some-firebase.firebaseapp.com" app-name="TestApp" facebook-app-id="123457890" enable-google enable-facebook></firebase-ui>
 
 @demo demo/index.html
 @hero hero.svg
@@ -331,12 +331,7 @@ Example:
     // Element Lifecycle
 
     ready: function() {
-      // `ready` is called after all elements have been configured, but
-      // propagates bottom-up. This element's children are ready, but parents
-      // are not.
-      //
-      // This is the point where you should make modifications to the DOM (when
-      // necessary), or kick off any processes the element wants to perform.
+
     },
 
     attached: function() {
@@ -401,10 +396,7 @@ Example:
     },
 
     detached: function() {
-      // The analog to `attached`, `detached` fires when the element has been
-      // removed from a document.
-      //
-      // Use this to clean up anything you did in `attached`.
+
     },
 
     // Element Behavior
@@ -465,59 +457,7 @@ Example:
         .catch(function(err) {
           console.log('error');
           return Promise.reject(err);
-          // if (err && err.name === 'auth/email-exists') {
-          //   var basicProfile = user.getBasicProfile();
-          //   var profile = {
-          //     id: basicProfile.getId(),
-          //     name: basicProfile.getName(),
-          //     givenName: basicProfile.getGivenName(),
-          //     familyName: basicProfile.getFamilyName(),
-          //     imageUrl: basicProfile.getImageUrl(),
-          //     email: basicProfile.getEmail()
-          //   };
-          //   firebaseUI.confirmCredential(profile.email, {
-          //     provider: 'google.com',
-          //     credential: credential,
-          //     user: profile,
-          //     error: err
-          //   });
-          // } else {
-          //   firebaseUI.fire('error', err);
-          // }
         });
-      
-      // return gapi.auth2.getAuthInstance().signIn(config)
-      //   .then(function(googleUser) {
-      //     user = googleUser;
-      //     credential = firebase.auth.GoogleAuthProvider.credential({
-      //       'idToken': googleUser.getAuthResponse().id_token
-      //     });
-      //     return firebaseUI.auth.signInWithCredential(credential)
-      //       .then(function(user) {
-      //         firebaseUI.$.loginDialog.close();
-      //         return Promise.resolve(user);
-      //       });
-      //   }, function(err) {
-      //     if (err && err.name === 'auth/email-exists') {
-      //       var basicProfile = user.getBasicProfile();
-      //       var profile = {
-      //         id: basicProfile.getId(),
-      //         name: basicProfile.getName(),
-      //         givenName: basicProfile.getGivenName(),
-      //         familyName: basicProfile.getFamilyName(),
-      //         imageUrl: basicProfile.getImageUrl(),
-      //         email: basicProfile.getEmail()
-      //       };
-      //       firebaseUI.confirmCredential(profile.email, {
-      //         provider: 'google.com',
-      //         credential: credential,
-      //         user: profile,
-      //         error: err
-      //       });
-      //     } else {
-      //       firebaseUI.fire('error', err);
-      //     }
-      //   });
     },
 
     loginWithFacebook: function() {
