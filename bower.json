@@ -2,17 +2,18 @@
   "name": "firebase-ui",
   "version": "1.0.7",
   "authors": [
-    "Anonymous <anonymous@example.com>"
+    "Chris Esplin <chris@quiver.is>"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "A wrapper for Firebase 3.0 Authentication",
   "keywords": [
     "web-component",
     "polymer",
-    "seed"
+    "firebase",
+    "authentication"
   ],
   "main": "firebase-ui.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "homepage": "https://github.com/deltaepsilon/firebase-ui/",
   "ignore": [
     "/.*",
     "/test/"
