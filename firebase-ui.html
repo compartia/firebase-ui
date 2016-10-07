@@ -136,8 +136,8 @@ Example:
         <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
         <h2>Please Sign In</h2>
         <paper-dialog-scrollable class="layout vertical">
-          <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
-          <paper-input label="password" type="password" value="{{password::input}}"></paper-input>
+          <gold-email-input label="email@domain.com" value="{{email}}"></gold-email-input>
+          <paper-input label="password" type="password" value="{{password}}"></paper-input>
           <paper-button class="firebase-button" raised on-click="signInWithEmailAndPassword" disabled$="[[!credentialsValid]]">Login</paper-button>
           <template is="dom-if" if="{{showOAuth}}">
             <div class="divider">
@@ -165,8 +165,8 @@ Example:
         </p>
         <paper-dialog-scrollable class="layout vertical">
           <template is="dom-if" if="{{confirmEmailPassword}}">
-            <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
-            <paper-input label="password" type="password" value="{{password::input}}"></paper-input>
+            <gold-email-input label="email@domain.com" value="{{email}}"></gold-email-input>
+            <paper-input label="password" type="password" value="{{password}}"></paper-input>
             <paper-button class="firebase-button" raised on-click="getCredentialForEmailAndPassword" disabled$="[[!credentialsValid]]">Login</paper-button>
           </template>
           <template is="dom-if" if="{{confirmGoogle}}">
@@ -184,8 +184,8 @@ Example:
         <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
         <h2>Register</h2>
         <paper-dialog-scrollable class="layout vertical">
-          <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
-          <paper-input label="password" type="password" value="{{password::input}}"></paper-input>
+          <gold-email-input label="email@domain.com" value="{{email}}"></gold-email-input>
+          <paper-input label="password" type="password" value="{{password}}"></paper-input>
           <paper-button class="firebase-button" raised on-click="createUserWithEmailAndPassword" disabled$="[[!credentialsValid]]">Register</paper-button>
         </paper-dialog-scrollable>
       </paper-material>
@@ -195,7 +195,7 @@ Example:
         <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
         <h2>Send Password Reset Email</h2>
         <paper-dialog-scrollable class="layout vertical">
-          <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
+          <gold-email-input label="email@domain.com" value="{{email}}"></gold-email-input>
           <paper-button class="firebase-button" raised on-click="sendPasswordResetEmail" disabled$="[[!emailValid]]">Send</paper-button>
         </paper-dialog-scrollable>
       </paper-material>
@@ -205,9 +205,9 @@ Example:
         <paper-icon-button class="close" icon="close" dialog-dismiss></paper-icon-button>
         <h2>Change Password</h2>
         <paper-dialog-scrollable class="layout vertical">
-          <gold-email-input label="email@domain.com" value="{{email::input}}"></gold-email-input>
-          <paper-input label="current password" type="password" value="{{password::input}}"></paper-input>
-          <paper-input label="new password" type="password" value="{{newPassword::input}}"></paper-input>
+          <gold-email-input label="email@domain.com" value="{{email}}"></gold-email-input>
+          <paper-input label="current password" type="password" value="{{password}}"></paper-input>
+          <paper-input label="new password" type="password" value="{{newPassword}}"></paper-input>
           <paper-button class="firebase-button" raised on-click="confirmPasswordReset" disabled$="[[!resetValid]]">Reset Password</paper-button>
         </paper-dialog-scrollable>
       </paper-material>
