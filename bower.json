@@ -1,6 +1,6 @@
 {
   "name": "firebase-ui",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "authors": [
     "Chris Esplin <chris@quiver.is>"
   ],
@@ -16,7 +16,13 @@
   "homepage": "https://github.com/deltaepsilon/firebase-ui/",
   "ignore": [
     "/.*",
-    "/test/"
+    "/test/",
+    "/.*",
+    "/*.md",
+    "/*.svg",
+    "/demo/",
+    "/index.html",
+    "/LICENSE"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.2.0",
